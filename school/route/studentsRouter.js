@@ -61,4 +61,23 @@ router.route("/:id/city")
         };
     });
 
+router.route("/:id/activity")
+    .get(async (req, res) => {
+        const id = req.params.id;
+        let user;
+        try {
+            user = await Postgres.query("SELECT * FROM students INNER JOIN favorites ON students.id = favorites.student_id WHERE students.id = $1;", [id]);
+
+            res.json({
+                status: "Sucess",
+                demand: `Ask for informations and favorites activities about student ${id}`,
+                data: user.rows,
+            });
+        } catch (err) {
+            res.status(400).json({
+                message: "An error happened",
+            });
+        };
+    });
+
 module.exports = router;
