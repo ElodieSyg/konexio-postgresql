@@ -118,17 +118,19 @@ router.route("/:id/sport")
         };
     });
 
-router.route("/all/:activity")
+router.route("/all/:class")
     .get(async (req, res) => {
-        const activityParams = req.params.activity;
-        const activity = activityParams.substring(0, 1).toUpperCase() + activityParams.substring(1).toLowerCase();
+        const classesParams = req.params.class;
+        console.log(classesParams);
+        const classes = classesParams.substring(0, 1).toUpperCase() + classesParams.substring(1).toLowerCase();
+        console.log(classes)
         let users;
         try {
-            users = await Postgres.query("SELECT * FROM students INNER JOIN favorites ON students.id = favorites.student_id WHERE favorites.class= $1;", [activityParams]);
+            users = await Postgres.query("SELECT * FROM students INNER JOIN favorites ON students.id = favorites.student_id WHERE favorites.class= $1;", [classes]);
 
             res.json({
                 status: "Sucess",
-                demand: `Students who like ${activity}`,
+                demand: `Students who like ${classes}`,
                 data: users.rows,
             });
         } catch (err) {
