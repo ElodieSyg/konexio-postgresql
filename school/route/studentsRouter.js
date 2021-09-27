@@ -51,12 +51,31 @@ router.route("/:id/city")
 
             res.json({
                 status: "Sucess",
-                demand: `Ask for name and city about student ${id}`,
+                demand: `Ask for the city about student ${id}`,
                 data: user.rows,
             });
         } catch (err) {
             res.status(400).json({
                 message: "An error happened",
+            });
+        };
+    });
+
+router.route("/:id/favorites")
+    .get(async (req, res) => {
+        const id = req.params.id;
+        let user;
+        try {
+            user = await Postgres.query("SELECT class, sport FROM favorites WHERE id=$1", [id]);
+
+            res.json({
+                status: "Sucess",
+                demand: `Ask for favorites about student ${id}`,
+                data: user.rows,
+            });
+        } catch (err) {
+            res.status(400).json({
+                message: "An erro happened",
             });
         };
     });
@@ -98,4 +117,25 @@ router.route("/:id/sport")
             });
         };
     });
+
+router.route("/all/:activity")
+    .get(async (req, res) => {
+        const activityParams = req.params.activity;
+        const activity = activityParams.substring(0, 1).toUpperCase() + activityParams.substring(1).toLowerCase();
+        let users;
+        try {
+            users = await Postgres.query("SELECT * FROM students INNER JOIN favorites ON students.id = favorites.student_id WHERE favorites.class= $1;", [activityParams]);
+
+            res.json({
+                status: "Sucess",
+                demand: `Students who like ${activity}`,
+                data: users.rows,
+            });
+        } catch (err) {
+            res.status(400).json({
+                message: "An error happened",
+            });
+        };
+    });
+
 module.exports = router;

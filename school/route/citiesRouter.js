@@ -26,7 +26,7 @@ router.route("/")
 router.route("/:city")
     .get(async (req, res) => {
         const cityParams = req.params.city;
-        const city = cityParams.substring(0, 1).toUpperCase() + cityParams.substring(1);
+        const city = cityParams.substring(0, 1).toUpperCase() + cityParams.substring(1).toLowerCase();
 
         console.log(city)
         let users;
