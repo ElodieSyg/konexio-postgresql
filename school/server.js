@@ -9,12 +9,14 @@ const debug = require("./middleware/debug");
 // Import routers
 const studentsRouter = require("./route/studentsRouter");
 const languagesRouter = require("./route/languagesRouter");
+const citiesRouter = require("./route/citiesRouter");
 
 // Middlewares
 app.use(express.json());
 app.use(debug);
 app.use("/students", studentsRouter);
 app.use("/languages", languagesRouter);
+app.use("/city", citiesRouter);
 
 // Starting server
 app.listen(process.env.PORT, () => {
