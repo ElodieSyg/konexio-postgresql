@@ -42,6 +42,23 @@ router.route("/:id")
         };
     });
 
+router.route("/:id/city")
+    .get(async (req, res) => {
+        const id = req.params.id;
+        let user;
+        try {
+            user = await Postgres.query("SELECT name, city FROM students WHERE id=$1", [id]);
 
+            res.json({
+                status: "Sucess",
+                demand: `Ask for name and city about student ${id}`,
+                data: user.rows,
+            });
+        } catch (err) {
+            res.status(400).json({
+                message: "An error happened",
+            });
+        };
+    });
 
 module.exports = router;

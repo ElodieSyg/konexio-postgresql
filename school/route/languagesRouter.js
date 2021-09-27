@@ -30,7 +30,7 @@ router.route("/:id")
         let user;
 
         try {
-            user = await Postgres.query("SELECT name FROM students WHERE id=$1", [id]); // Check query
+            user = await Postgres.query("SELECT name, language FROM students WHERE id=$1", [id]); // Check query
             console.log(user.rows);
 
             res.json({
