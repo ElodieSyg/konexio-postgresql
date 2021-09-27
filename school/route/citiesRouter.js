@@ -5,6 +5,24 @@ const router = express.Router();
 // Postgres connection
 const Postgres = new Pool({ ssl: { rejectUnauthorized: false } });
 
+router.route("/")
+    .get(async (req, res) => {
+        let cities;
+        try {
+            cities = await Postgres.query("SELECT city FROM students");
+
+            res.json({
+                status: "Sucess",
+                demand: "Ask all cities",
+                data: cities.rows,
+            });
+        } catch (err) {
+            res.status(400).json({
+                message: "An error happened",
+            });
+        };
+    });
+
 router.route("/:city")
     .get(async (req, res) => {
         const cityParams = req.params.city;
