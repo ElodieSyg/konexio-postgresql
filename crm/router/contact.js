@@ -55,6 +55,21 @@ router.route("/")
                 message: "An error happened",
             });
         };
+    })
+    .patch(async (req, res) => {
+        const { name, email, description, category } = req.body;
+        try {
+            await Postgres.query("UPDATE $1 SET $2, $3, $4, $5 WHERE name=$6", [name, name, email, description, category, name]);
+
+            res.json({
+                status: "Sucess",
+                message: "Contact updated",
+            });
+        } catch (err) {
+            res.status(400).json({
+                message: "An error happened",
+            });
+        };
     });
 
 router.route("/:id")
