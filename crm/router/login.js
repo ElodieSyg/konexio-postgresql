@@ -29,7 +29,7 @@ router.route("/")
             });
         };
 
-        const token = jwt.sign({ id: user.rows.id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_SECRET);
 
         res.cookie("jwt", token, { httpOnly: true, secure: false });
 

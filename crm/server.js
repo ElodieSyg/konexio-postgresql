@@ -10,12 +10,14 @@ const debug = require("./middleware/debug");
 // Import routers
 const register = require("./router/register");
 const login = require("./router/login");
+const contact = require("./router/contact");
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(debug);
 app.use("/register", register);
 app.use("/login", login);
+app.use("/contact", contact);
 
 // Starting server
 app.listen(process.env.PORT, () => {
