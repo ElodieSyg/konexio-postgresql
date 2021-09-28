@@ -1,5 +1,5 @@
-const { application } = require("express");
 const express = require("express");
+const bcrypt = require("bcrypt");
 const { Pool } = require("pg");
 const router = express.Router();
 
@@ -10,7 +10,7 @@ const Postgres = new Pool({
 
 // Routers
 router.route("/")
-    .get(async (req, res) => {
+    .get(async (_req, res) => {
         let users;
         try {
             users = await Postgres.query("SELECT * FROM users");
@@ -27,14 +27,11 @@ router.route("/")
         };
     })
     .post(async (req, res) => {
-        const email = req.body.email;
-        console.log(email);
-        const password = req.body.password;
-        console.log(password);
+        const { email, password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 12);
         let user;
         try {
-            user = await Postgres.query("INSERT INTO users(email, password) VALUES ($1, $2)", [email, password]);
-            console.log(user.rows);
+            user = await Postgres.query("INSERT INTO users(email, password) VALUES ($1, $2)", [email, hashedPassword]);
 
             res.json({
                 status: "Sucess",
@@ -42,12 +39,12 @@ router.route("/")
                 data: user.rows,
             });
         } catch (err) {
-            console.log(err);
+            console.log("err")
             res.status(400).json({
                 message: "An error happened",
             });
         };
-    })
+    });
 
 router.route("/:id")
     .delete(async (req, res) => {
